@@ -67,6 +67,14 @@ function ProjectCard({ project, index }: { project: typeof projects[0], index: n
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
       onClick={() => setExpanded(!expanded)}
+      onMouseEnter={(e) => {
+        const video = e.currentTarget.querySelector('video');
+        if (video) (video as HTMLVideoElement).play().catch(() => {});
+      }}
+      onMouseLeave={(e) => {
+        const video = e.currentTarget.querySelector('video');
+        if (video) (video as HTMLVideoElement).pause();
+      }}
     >
       {/* Background Media */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -76,7 +84,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0], index: n
             poster={project.image}
             className="w-full h-full"
             style={{ position: 'absolute', inset: 0 }}
-            autoPlayWhenVisible={true}
+            autoPlayWhenVisible={false}
             rootMargin="100px 0px"
           />
         ) : (
