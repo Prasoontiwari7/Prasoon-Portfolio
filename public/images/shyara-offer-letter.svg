@@ -1,0 +1,14 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="520" rx="24" fill="#0F172A"/>
+  <rect x="40" y="40" width="720" height="440" rx="18" fill="#111827" stroke="#D4F87A" stroke-width="2"/>
+  <rect x="72" y="84" width="196" height="24" rx="12" fill="#D4F87A"/>
+  <text x="72" y="160" fill="#F9FAFB" font-family="Arial, sans-serif" font-size="40" font-weight="700">Shyara Tech</text>
+  <text x="72" y="208" fill="#E5E7EB" font-family="Arial, sans-serif" font-size="28">Offer Letter</text>
+  <rect x="72" y="260" width="320" height="18" rx="9" fill="#F3F4F6"/>
+  <rect x="72" y="292" width="260" height="14" rx="7" fill="#9CA3AF"/>
+  <rect x="72" y="320" width="284" height="14" rx="7" fill="#9CA3AF"/>
+  <rect x="72" y="348" width="220" height="14" rx="7" fill="#9CA3AF"/>
+  <rect x="500" y="324" width="180" height="96" rx="16" fill="#1F2937" stroke="#D4F87A" stroke-width="2"/>
+  <text x="534" y="368" fill="#D4F87A" font-family="Arial, sans-serif" font-size="24" font-weight="700">Accepted</text>
+  <text x="72" y="430" fill="#D4F87A" font-family="Arial, sans-serif" font-size="20">Data Scientist Internship</text>
+</svg>

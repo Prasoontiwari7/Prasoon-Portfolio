@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 53%;
+    --accent: 75 88% 73%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 100% / 0.1;
+    --input: 0 0% 100% / 0.1;
+    --ring: 75 88% 73%;
+    --radius: 0.625rem;
+
+    /* Custom design tokens */
+    --mist-black: #0A0A0A;
+    --kimono-white: #FAFAFA;
+    --mountain-cream: #F5E8D3;
+    --lime-accent: #D4F87A;
+    --sakura-pink: #FFB7C5;
+    --mouse-gray: #888888;
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-panel: rgba(20, 20, 20, 0.5);
+
+    /* Font families */
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-editorial: 'Cormorant Garamond', serif;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    background-color: var(--mist-black);
+    color: var(--kimono-white);
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Hide default cursor when custom cursor is active */
+  body.has-custom-cursor {
+    cursor: none;
+  }
+
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor [role="button"] {
+    cursor: none;
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: var(--lime-accent);
+    color: var(--mist-black);
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-editorial {
+    font-family: var(--font-editorial);
+  }
+
+  .text-lime {
+    color: var(--lime-accent);
+  }
+
+  .bg-lime {
+    background-color: var(--lime-accent);
+  }
+
+  .bg-mist {
+    background-color: var(--mist-black);
+  }
+
+  .text-cream {
+    color: var(--mountain-cream);
+  }
+
+  .bg-cream {
+    background-color: var(--mountain-cream);
+  }
+
+  /* Glassmorphism card */
+  .glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212, 248, 122, 0.4);
+    box-shadow: 0 8px 32px rgba(212, 248, 122, 0.08);
+  }
+
+  /* Hairline rule */
+  .hairline {
+    height: 1px;
+    background-color: var(--glass-border);
+  }
+
+  /* Nav link underline animation */
+  .nav-link {
+    position: relative;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--kimono-white);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease-out;
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Pill button */
+  .pill-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 9999px;
+    padding: 10px 28px;
+    color: var(--kimono-white);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pill-btn:hover {
+    background-color: var(--lime-accent);
+    border-color: var(--lime-accent);
+    color: var(--mist-black);
+  }
+
+  /* Form input underline */
+  .form-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 0;
+    color: var(--kimono-white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .form-input:focus {
+    border-bottom-color: var(--lime-accent);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Accessibility: prefers-reduced-motion
+   Disables all custom transitions and animations for users
+   who have requested reduced motion in their OS settings.
+   ═══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .glass-card:hover {
+    transform: none;
+  }
+}
