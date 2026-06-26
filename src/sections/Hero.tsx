@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import LazyVideo from '../components/LazyVideo';
 
 type PolaroidItem = {
   video?: string;
@@ -18,8 +19,6 @@ const polaroids: PolaroidItem[] = [
 ];
 
 function PolaroidCard({ item, isMobile, index }: { item: PolaroidItem; isMobile: boolean; index: number }) {
-  const [mediaReady, setMediaReady] = useState(item.type === 'animated');
-
   return (
     <motion.div
       key={index}
@@ -68,27 +67,13 @@ function PolaroidCard({ item, isMobile, index }: { item: PolaroidItem; isMobile:
             </div>
           </div>
         ) : (
-          <video
-            src={item.video}
-            muted
-            loop
-            playsInline
-            preload="auto"
-            autoPlay
-            className="w-full h-full object-cover"
-            onLoadedData={(event) => {
-              const video = event.currentTarget as HTMLVideoElement;
-              setMediaReady(true);
-              video.play().catch(() => {});
-            }}
+          <LazyVideo
+            src={item.video || ''}
+            className="w-full h-full"
+            autoPlayWhenVisible={!isMobile}
+            rootMargin="100px 0px"
           />
         )}
-        <div className={`absolute inset-0 z-10 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-500 ${mediaReady ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <div className="text-center px-2">
-            <p className="text-[#D4F87A] text-[10px] uppercase tracking-[0.24em] mb-1">Loading video</p>
-            <p className="text-white/70 text-[11px]">Please wait</p>
-          </div>
-        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-50" />
       </div>
       <div className="p-3 pt-2 pointer-events-none">
@@ -167,9 +152,10 @@ export default function Hero() {
         transition={{ duration: 1.5, ease: "easeOut" }}
       >
         <img
-          src="/images/hero-mountains.jpg" // Placeholder for cinematic engineering universe
+          src="/images/hero-mountains.jpg"
           alt="Cinematic data landscape"
           className="w-full h-full object-cover object-[center_30%]"
+          fetchPriority="high"
         />
       </motion.div>
 
@@ -245,7 +231,7 @@ export default function Hero() {
         transition={{ duration: 1.5, ease: "easeOut" }}
       >
         <img
-          src="/images/hero-mountains.jpg" // Placeholder for foreground engineering landscape
+          src="/images/hero-mountains.jpg"
           alt=""
           className="w-full h-full object-cover object-[center_30%]"
           style={{
@@ -278,13 +264,14 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 1.0 }}
+        loading="lazy"
       />
 
       {/* Kimono Figure -> Developer Silhouette (Placeholder) */}
       <motion.img
-        src="/images/hero-kimono.png" // Placeholder
+        src="/images/hero-kimono.png"
         alt="Developer gazing at the digital horizon"
-        className="absolute right-[8vw] bottom-[8vh] z-[10] pointer-events-none"
+        className="absolute right-[8vw] bottom-[8vh] z-[10] pointer-events-none hidden md:block"
         style={{
           width: 'clamp(200px, 25vw, 400px)',
           height: 'auto'
@@ -292,6 +279,7 @@ export default function Hero() {
         initial={{ opacity: 0, x: 30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.8 }}
+        loading="lazy"
       />
 
       {/* Primary & Secondary CTAs */}
@@ -371,7 +359,7 @@ export default function Hero() {
           LAYER 5: Polaroid Card Strip (Scroll + Hover states)
           ═══════════════════════════════════════════════════════════════ */}
       <motion.div
-        className="absolute z-[11] bottom-[6vh] left-[clamp(20px,4vw,60px)] right-[clamp(20px,4vw,60px)] flex gap-4 overflow-x-auto pb-4 pr-2 lg:overflow-visible"
+        className="absolute z-[11] bottom-[6vh] left-[clamp(20px,4vw,60px)] right-[clamp(20px,4vw,60px)] flex gap-4 overflow-x-auto pb-4 pr-2 lg:overflow-visible polaroid-strip"
         style={{ x: polaroidsX, willChange: 'transform' }}
       >
         {polaroids.map((item, i) => (

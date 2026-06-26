@@ -302,3 +302,38 @@
     transform: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Mobile-specific styles
+   ═══════════════════════════════════════════════════════════ */
+
+/* Hide scrollbars on the polaroid strip and similar horizontal scrollers */
+.polaroid-strip {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE/Edge */
+}
+.polaroid-strip::-webkit-scrollbar {
+  display: none;                  /* Chrome/Safari */
+}
+
+/* Ensure touch targets are at least 44×44 */
+@media (max-width: 767px) {
+  .nav-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Tighter padding on mobile for sections */
+  section {
+    scroll-margin-top: 60px;
+  }
+}
+
+/* GPU-accelerated scrolling hint for all videos */
+video {
+  will-change: auto;
+  transform: translateZ(0);
+}
+

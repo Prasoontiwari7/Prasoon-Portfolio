@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import LazyVideo from '../components/LazyVideo';
 
 const projects = [
   {
@@ -53,7 +54,6 @@ function ProjectCard({ project, index }: { project: typeof projects[0], index: n
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { amount: 0.2, once: true });
   const [expanded, setExpanded] = useState(false);
-  const [mediaReady, setMediaReady] = useState(false);
 
   return (
     <motion.div
@@ -71,47 +71,35 @@ function ProjectCard({ project, index }: { project: typeof projects[0], index: n
       {/* Background Media */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         {project.video ? (
-          <video
+          <LazyVideo
             src={project.video}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            onLoadedData={(event) => {
-              const video = event.currentTarget as HTMLVideoElement;
-              setMediaReady(true);
-              video.play().catch(() => {});
-            }}
+            poster={project.image}
+            className="w-full h-full"
+            style={{ position: 'absolute', inset: 0 }}
+            autoPlayWhenVisible={true}
+            rootMargin="300px 0px"
           />
         ) : (
           <img
             src={project.image}
             alt={project.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            onLoad={() => setMediaReady(true)}
+            loading="lazy"
           />
         )}
-        <div className={`absolute inset-0 z-10 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-500 ${mediaReady ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <div className="text-center px-4">
-            <p className="text-[#D4F87A] text-[11px] uppercase tracking-[0.3em] mb-2">Loading project preview</p>
-            <p className="text-white/70 text-sm">Please wait a moment while the media loads.</p>
-          </div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-500 z-[1]" />
       </div>
 
       {/* Content */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-end p-8 md:p-12">
+      <div className="absolute inset-0 z-10 flex flex-col justify-end p-6 md:p-12">
         <div className="max-w-3xl">
           <h4 className="text-[#D4F87A] text-xs tracking-[0.2em] uppercase mb-4" style={{ fontFamily: 'var(--font-body)' }}>
             {project.stack}
           </h4>
-          <h3 className="text-[#FAFAFA] text-4xl md:text-6xl mb-2" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
+          <h3 className="text-[#FAFAFA] text-3xl md:text-6xl mb-2" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
             {project.title}
           </h3>
-          <p className="text-white/80 text-lg md:text-xl mb-4" style={{ fontFamily: 'var(--font-body)' }}>
+          <p className="text-white/80 text-base md:text-xl mb-4" style={{ fontFamily: 'var(--font-body)' }}>
             {project.subtitle}
           </p>
           <p className="text-[#888888] text-sm tracking-wider uppercase mb-8" style={{ fontFamily: 'var(--font-body)' }}>

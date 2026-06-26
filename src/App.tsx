@@ -16,18 +16,22 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const handleLoad = () => setIsLoading(false);
+    const handleReady = () => setIsLoading(false);
 
-    if (document.readyState === 'complete') {
-      handleLoad();
-      return;
+    // Don't wait for 'load' — that blocks on every single resource (121MB+ of video).
+    // Instead, show the app as soon as the DOM is interactive.
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
+      // Small delay for the initial CSS/font paint to settle
+      const timer = window.setTimeout(handleReady, 400);
+      return () => window.clearTimeout(timer);
     }
 
-    window.addEventListener('load', handleLoad);
-    const timer = window.setTimeout(handleLoad, 2200);
+    // Fallback: listen for DOMContentLoaded (fires once HTML + deferred scripts are parsed)
+    document.addEventListener('DOMContentLoaded', handleReady);
+    const timer = window.setTimeout(handleReady, 800);
 
     return () => {
-      window.removeEventListener('load', handleLoad);
+      document.removeEventListener('DOMContentLoaded', handleReady);
       window.clearTimeout(timer);
     };
   }, []);
