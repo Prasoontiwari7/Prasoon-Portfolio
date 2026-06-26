@@ -77,7 +77,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0], index: n
             className="w-full h-full"
             style={{ position: 'absolute', inset: 0 }}
             autoPlayWhenVisible={true}
-            rootMargin="300px 0px"
+            rootMargin="100px 0px"
           />
         ) : (
           <img

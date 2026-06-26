@@ -48,6 +48,10 @@ function PolaroidCard({ item, isMobile, index }: { item: PolaroidItem; isMobile:
         const video = e.currentTarget.querySelector('video');
         if (video) (video as HTMLVideoElement).play().catch(() => {});
       }}
+      onMouseLeave={(e) => {
+        const video = e.currentTarget.querySelector('video');
+        if (video) (video as HTMLVideoElement).pause();
+      }}
     >
       <div className="w-full h-[100px] overflow-hidden pointer-events-none relative">
         {item.type === 'animated' ? (
@@ -70,7 +74,7 @@ function PolaroidCard({ item, isMobile, index }: { item: PolaroidItem; isMobile:
           <LazyVideo
             src={item.video || ''}
             className="w-full h-full"
-            autoPlayWhenVisible={!isMobile}
+            autoPlayWhenVisible={false}
             rootMargin="100px 0px"
           />
         )}

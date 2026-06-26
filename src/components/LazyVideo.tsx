@@ -91,7 +91,7 @@ export default function LazyVideo({
           muted={muted}
           loop={loop}
           playsInline={playsInline}
-          preload="auto"
+          preload="metadata"
           autoPlay={autoPlayWhenVisible}
           className="w-full h-full object-cover"
           poster={poster}
