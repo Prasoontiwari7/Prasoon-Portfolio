@@ -1,13 +1,110 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-const polaroids = [
+type PolaroidItem = {
+  video?: string;
+  title: string;
+  caption: string;
+  type?: string;
+  animationType?: string;
+};
+
+const polaroids: PolaroidItem[] = [
   { video: '/videos/skipperx-internship.mp4', title: 'SkipperX', caption: 'Brand & Campaign Partner' },
   { video: '/videos/leetcode-internship.mp4', title: '200+', caption: 'LeetCode Problems Solved' },
   { video: '/videos/shyara-internship.mp4', title: 'Data Scientist', caption: 'Shyara Tech Solutions' },
   { video: '/videos/deloitte-dashboard.mp4', title: 'Deloitte', caption: 'Data Analytics Experience' },
   { video: '/videos/rendering-software.mp4', title: 'Video Rendering Software', caption: 'FFmpeg-based rendering workflow' },
 ];
+
+function PolaroidCard({ item, isMobile, index }: { item: PolaroidItem; isMobile: boolean; index: number }) {
+  const [mediaReady, setMediaReady] = useState(item.type === 'animated');
+
+  return (
+    <motion.div
+      key={index}
+      className="polaroid-card group flex-shrink-0 rounded-lg overflow-hidden cursor-pointer"
+      style={{
+        width: isMobile ? '140px' : '160px',
+        height: isMobile ? '170px' : '180px',
+        background: 'rgba(10,10,10,0.6)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        backdropFilter: 'blur(12px)',
+      }}
+      initial={{ opacity: 0, x: -40 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1],
+        delay: 1.2 + (index * 0.1)
+      }}
+      whileHover={{
+        y: -8,
+        scale: 1.02,
+        boxShadow: '0 20px 40px rgba(212, 248, 122, 0.15)',
+        borderColor: 'rgba(212, 248, 122, 0.3)',
+        transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
+      }}
+      onMouseEnter={(e) => {
+        const video = e.currentTarget.querySelector('video');
+        if (video) (video as HTMLVideoElement).play().catch(() => {});
+      }}
+    >
+      <div className="w-full h-[100px] overflow-hidden pointer-events-none relative">
+        {item.type === 'animated' ? (
+          <div
+            className="w-full h-full flex items-center justify-center text-center relative"
+            style={{
+              background: item.animationType === 'leetcode'
+                ? 'linear-gradient(135deg, #FFB800 0%, #FF6B35 100%)'
+                : item.animationType === 'deloitte'
+                ? 'linear-gradient(135deg, #0066B2 0%, #00A4EF 100%)'
+                : 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)',
+              animation: 'pulse-gradient 3s ease-in-out infinite',
+            }}
+          >
+            <div className="text-white font-bold text-2xl drop-shadow-lg">
+              {item.animationType === 'leetcode' ? '💻' : item.animationType === 'deloitte' ? '📊' : '🚀'}
+            </div>
+          </div>
+        ) : (
+          <video
+            src={item.video}
+            muted
+            loop
+            playsInline
+            preload="auto"
+            autoPlay
+            className="w-full h-full object-cover"
+            onLoadedData={(event) => {
+              const video = event.currentTarget as HTMLVideoElement;
+              setMediaReady(true);
+              video.play().catch(() => {});
+            }}
+          />
+        )}
+        <div className={`absolute inset-0 z-10 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-500 ${mediaReady ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <div className="text-center px-2">
+            <p className="text-[#D4F87A] text-[10px] uppercase tracking-[0.24em] mb-1">Loading video</p>
+            <p className="text-white/70 text-[11px]">Please wait</p>
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-50" />
+      </div>
+      <div className="p-3 pt-2 pointer-events-none">
+        <h3 className="text-[#D4F87A] text-xs font-semibold uppercase tracking-wider mb-1" style={{ fontFamily: 'var(--font-body)' }}>
+          {item.title}
+        </h3>
+        <p
+          className="text-[11px] text-[#888888] leading-tight"
+          style={{ fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}
+        >
+          {item.caption}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -278,81 +375,7 @@ export default function Hero() {
         style={{ x: polaroidsX, willChange: 'transform' }}
       >
         {polaroids.map((item, i) => (
-          <motion.div
-            key={i}
-            className="polaroid-card group flex-shrink-0 rounded-lg overflow-hidden cursor-pointer"
-            style={{
-              width: isMobile ? '140px' : '160px',
-              height: isMobile ? '170px' : '180px',
-              background: 'rgba(10,10,10,0.6)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              backdropFilter: 'blur(12px)',
-            }}
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ 
-              duration: 0.6, 
-              ease: [0.16, 1, 0.3, 1], 
-              delay: 1.2 + (i * 0.1) 
-            }}
-            whileHover={{ 
-              y: -8, 
-              scale: 1.02,
-              boxShadow: '0 20px 40px rgba(212, 248, 122, 0.15)',
-              borderColor: 'rgba(212, 248, 122, 0.3)',
-              transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
-            }}
-            onMouseEnter={(e) => {
-              const video = e.currentTarget.querySelector('video');
-              if (video) (video as HTMLVideoElement).play().catch(() => {});
-            }}
-          >
-            <div className="w-full h-[100px] overflow-hidden pointer-events-none relative">
-              {(item as any).type === 'animated' ? (
-                <div 
-                  className="w-full h-full flex items-center justify-center text-center relative"
-                  style={{
-                    background: (item as any).animationType === 'leetcode' 
-                      ? 'linear-gradient(135deg, #FFB800 0%, #FF6B35 100%)' 
-                      : (item as any).animationType === 'deloitte'
-                      ? 'linear-gradient(135deg, #0066B2 0%, #00A4EF 100%)'
-                      : 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)',
-                    animation: 'pulse-gradient 3s ease-in-out infinite',
-                  }}
-                >
-                  <div className="text-white font-bold text-2xl drop-shadow-lg">
-                    {(item as any).animationType === 'leetcode' ? '💻' : (item as any).animationType === 'deloitte' ? '📊' : '🚀'}
-                  </div>
-                </div>
-              ) : (
-                <video
-                  src={item.video}
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  autoPlay
-                  className="w-full h-full object-cover"
-                  onLoadedData={(event) => {
-                    const video = event.currentTarget as HTMLVideoElement;
-                    video.play().catch(() => {});
-                  }}
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-50" />
-            </div>
-            <div className="p-3 pt-2 pointer-events-none">
-              <h3 className="text-[#D4F87A] text-xs font-semibold uppercase tracking-wider mb-1" style={{ fontFamily: 'var(--font-body)' }}>
-                {item.title}
-              </h3>
-              <p
-                className="text-[11px] text-[#888888] leading-tight"
-                style={{ fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}
-              >
-                {item.caption}
-              </p>
-            </div>
-          </motion.div>
+          <PolaroidCard key={i} item={item} isMobile={isMobile} index={i} />
         ))}
       </motion.div>
     </section>

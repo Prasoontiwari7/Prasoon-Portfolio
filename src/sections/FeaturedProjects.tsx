@@ -53,6 +53,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0], index: n
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { amount: 0.2, once: true });
   const [expanded, setExpanded] = useState(false);
+  const [mediaReady, setMediaReady] = useState(false);
 
   return (
     <motion.div
@@ -80,6 +81,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0], index: n
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             onLoadedData={(event) => {
               const video = event.currentTarget as HTMLVideoElement;
+              setMediaReady(true);
               video.play().catch(() => {});
             }}
           />
@@ -88,8 +90,15 @@ function ProjectCard({ project, index }: { project: typeof projects[0], index: n
             src={project.image}
             alt={project.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            onLoad={() => setMediaReady(true)}
           />
         )}
+        <div className={`absolute inset-0 z-10 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-500 ${mediaReady ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <div className="text-center px-4">
+            <p className="text-[#D4F87A] text-[11px] uppercase tracking-[0.3em] mb-2">Loading project preview</p>
+            <p className="text-white/70 text-sm">Please wait a moment while the media loads.</p>
+          </div>
+        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-500" />
       </div>
 
